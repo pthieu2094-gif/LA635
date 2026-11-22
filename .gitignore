@@ -1,0 +1,19 @@
+# AutoCAD backup & lock files
+*.bak
+*.dwl
+*.dwl2
+*.dxf.tmp
+acad.err
+acad.log
+
+# Temporary & cache files
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+Thumbs.db
+node_modules/
+
+# Scratch & debug
+*.tmp
+temp/
