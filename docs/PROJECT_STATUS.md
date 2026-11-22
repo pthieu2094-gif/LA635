@@ -121,37 +121,17 @@ Toàn bộ mã nguồn dựng hình và hiệu chỉnh Nhà bảo dưỡng B02 t
 - `do_mirror.lsp` (Lệnh: `DO_MIRROR`): Mirror thiết bị WC trái đối xứng hoàn hảo qua tim $X_c = 28,700.8$.
 - `fix_three_issues.lsp` (Lệnh: `FIX_ALL`): Xử lý dứt điểm 3 lỗi kiến trúc (cột Trục 6-C, khép kín tường Trục C, chia đều bậc thang $250\text{ mm}$).
 
-### C. Nhóm Thư viện Dùng chung (`scripts/lisp/common_tools/`)
-Bộ công cụ CAD chuyên nghiệp kế thừa từ kho dữ liệu chuẩn của kỹ sư (`E:\00. DATA\01. CAD\00. AUTOLISP\`), giúp vẽ và hiệu chỉnh siêu tốc:
-- `TT_CHUYEN_Z_VE_0.lsp` (Lệnh: `ZZZ`): Đưa toàn bộ đối tượng về $Z = 0$ (làm phẳng bản vẽ 2D, chống lỗi lệch cao độ).
-- `joinline.lsp` (Lệnh: `nn`): Nối các đoạn Line/Arc rời rạc thành Polyline kín (`Closed`).
-- `TT_SNAP_ON.lsp` (Lệnh: `5`): Bật đầy đủ chế độ Osnap bắt điểm chuẩn.
-- `LM_ChangeBlockBasePoint.lsp` (Lệnh: `CBP`, `CBC`): Đổi điểm đặt block mà không làm lệch vị trí chèn.
-- `LM_CopyRenameBlock.lsp` (Lệnh: `cb`, `rr`): Nhân bản và đổi tên block trực tiếp.
-- `TT_THAY_THE_BLOCK.lsp` (Lệnh: `TTB`): Thay thế hàng loạt block cũ bằng block mới.
-- `TT_STAIRCASE_V1.lsp` (Lệnh: `cc`): Tự động tính toán và chia bậc thang theo kích thước yêu cầu.
-- `TT_DOOR.lsp` (Lệnh: `door`): Tiện ích vẽ và chèn cửa kiến trúc theo kích thước linh hoạt.
-- `TT_DAT_COT_TRUC.lsp` (Lệnh: `SCL1`): Đặt cột hàng loạt tại các giao điểm lưới trục.
-- `TT_TAO_DIM.lsp` (Lệnh: `DS`): Khởi tạo hệ thống DimStyle kiến trúc chuẩn mực.
-- `TT_TDTL_LAYER_DIM.lsp` (Lệnh: `TDTL`): Thay đổi tỉ lệ và chuyển layer cho Dimension.
-- `TT_SPACE_DIM.lsp` (Lệnh: `SD`): Dóng đều khoảng cách giữa các hàng Dimension.
-- `TT_TEXT_DIM_BELOW.lsp` (Lệnh: `TD`): Thêm text ghi chú bên dưới đường dim.
-- `TT_UPDATE_CAO_DO.lsp` (Lệnh: `CAODO`): Cập nhật ký hiệu và giá trị cao độ trên mặt cắt/mặt đứng.
-- `TT_VE_DO_DOC_SLOPE.lsp` (Lệnh: `S1`): Vẽ mũi tên và ký hiệu độ dốc mái (Slope $i\%$).
-- `TT_DRAW_SLOPE_XLINE.lsp` (Lệnh: `s2`): Bắn đường dóng XLINE vô tận theo góc dốc mái.
-- `TT_CANH_LEADER_TEXT.lsp` (Lệnh: `all`, `alr`): Căn lề trái/phải cho Leader và Text thẳng hàng.
-- `TT_COPY_TEXT.lsp` (Lệnh: `d1`): Sao chép nội dung text này sang text khác bằng 1 click.
-- `TT_CONVERT_FIELD_TO_TEXT.lsp` (Lệnh: `f2t`): Chuyển Field thành Text tĩnh chống lỗi nhảy chữ.
-- `TT_KHOANH_MAY_REV.lsp` (Lệnh: `REV`): Khoanh mây Revision đánh dấu thay đổi theo comment.
-- `TT_KHOA_VIEWPORT.lsp` (Lệnh: `W`): Khóa và mở khóa Viewport trong Layout chống zoom lệch tỉ lệ.
-- `TT_LAYON_ALL.lsp` (Lệnh: `T5`): Bật nhanh toàn bộ layer đang bị ẩn.
-- `tl.lsp` (Lệnh: `TL`): Tính tổng chiều dài danh sách đường nét được chọn.
-- `TONG_HOP_Chinh_Dim_Layer.lsp` (Các lệnh: `DS`, `TOP`, `HI`, `Q1`, `Q2`...): Tinh chỉnh và chuẩn hóa kích thước.
-- `TONG_HOP_Chuyen_Layer.lsp` (Các phím số tắt: `31`, `22`, `21`, `11`, `32`...): Chuyển nhanh layer đối tượng chỉ bằng 1 thao tác bấm phím.
-- `TONG_HOP_Chinh_Sua_Text.lsp` (Các lệnh: `TC`, `tv`, `yu`, `YY`, `XO`...): Bộ công cụ căn chỉnh, đổi font, nối text.
-- `TT_CANH_DIEM_DAU_LINE.lsp` (Lệnh: `BLB`, `BLT`, `BLL`, `BLR`): Căn dóng điểm đầu của các line/polyline.
-- `TT_XUAT_DANH_SACH_BAN_VE.lsp` (Lệnh: `eatt`): Tự động trích xuất danh mục bản vẽ từ khung tên.
-- `TT_TIEN_ICH_KHAC.lsp` (Lệnh: `InVis`, `Vis`, `SF`, `EE`...): Ẩn hiện đối tượng chọn lọc, lọc tìm nhanh.
+### C. Hệ thống 7 Module Thư viện Chuyên ngành (`scripts/lisp/`)
+Toàn bộ 79 công cụ CAD chuyên nghiệp kế thừa từ kho dữ liệu chuẩn của kỹ sư (`E:\00. DATA\01. CAD\00. AUTOLISP\`) được chuẩn hóa và gom vào 7 module chức năng:
+1. `architecture/`: Cửa đi (`door`), cầu thang (`cc`), độ dốc mái (`S1`, `s2`), diện tích phòng (`32`).
+2. `structure/`: Đặt cột (`SCL1`), lưới trục (`VLT`, `DLT`), dầm cột MC6 (`fc`, `wc`), thép tổ hợp (`VI`), giằng X (`x1`), ti giằng (`TI`), bu lông (`BLN`, `BDT`), bản mã (`BMN`, `BM`, `1E`), portal frame (`PORTAL`).
+3. `annotation/`: Tạo dim (`DS`), căn chỉnh dim (`TOP`, `HI`), đổi tỉ lệ dim (`TDTL`), dóng đều khoảng cách (`SD`), cắt/bẻ chân dim (`CD`, `BD`), ghi chú chân dim (`TD`), cao độ (`CAODO`), căn lề leader (`all`, `alr`), khoanh mây (`REV`).
+4. `text_tables/`: Copy text (`d1`), sửa text (`TC`), tính toán số trong text (`RT`, `CTT`), số tăng dần (`cot`), chuyển field sang text tĩnh (`f2t`), sửa attribute block (`edt`), thống kê bảng (`tkt`), xuất tọa độ (`XTD`, `atx`), xuất danh mục bản vẽ (`eatt`, `EAT1`).
+5. `blocks/`: Đổi base point không xê dịch (`CBP`), nhân bản & đổi tên block (`cb`, `rr`, `DTB`), thay block hàng loạt (`TTB`).
+6. `cad_cleanup/`: Làm phẳng Z=0 (`ZZZ`), nối polyline kín (`nn`), đo tổng chiều dài (`TL`), bẻ ngắt đường 1 điểm (`brn`), rải đối tượng (`rdt`), đổi về ByLayer (`lc`), căn điểm đầu (`BLB`..`BLR`), bật Osnap chuẩn (`5`).
+7. `layers_views_print/`: Phím tắt chuyển layer (`31`, `22`, `21`...), bật lại layer (`T5`), lọc đối tượng (`FF`, `ffd`, `fft`...), ẩn hiện nhanh (`InVis`, `Vis`), khóa viewport (`W`, `Z`), in ấn hàng loạt ra PDF (`IN`), sửa lỗi font tiếng Việt (`convertfont`).
+
+> 📖 **Xem hướng dẫn chi tiết từng lệnh, workflow và lưu ý phòng tránh lỗi tại:** [docs/AI_AUTOLISP_GUIDE.md](file:///E:/02.%20PART%20TIME/LA635/docs/AI_AUTOLISP_GUIDE.md)
 
 ---
 

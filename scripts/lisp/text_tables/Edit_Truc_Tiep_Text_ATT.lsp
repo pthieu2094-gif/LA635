@@ -1,0 +1,30 @@
+(defun c:edt (/ a b nd)
+(setvar "cmdecho" 0)
+(command "undo" "be")
+(setq 
+      a (car (nentsel "\nChon thuoc tinh can thay doi: "))
+      b (entget a)
+)
+(princ (strcat "\nNoi dung cu: "(cdr(assoc 1 b))))
+(setq nd (getstring "\nNoi dung moi: "))
+(entmod (subst (cons 1 nd)(assoc 1 b) b))
+(entupd a)
+(princ)
+(command "undo" "end")
+)
+;;;;;;;;;;;
+(defun c:edt1 (/ a b nd)
+(setvar "cmdecho" 0)
+(command "undo" "be")
+(setq a (car (nentsel "\nChon thuoc tinh can thay doi: ")))
+(while a
+	(setq b (entget a))
+	(setq nd "3")
+	(entmod (subst (cons 1 nd)(assoc 1 b) b))
+	(entupd a)
+	(setq a (car (nentsel "\nChon thuoc tinh can thay doi: ")))
+);;while
+(command "undo" "end")
+(princ)
+)
+

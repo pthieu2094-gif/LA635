@@ -29,12 +29,19 @@ Bản vẽ được sắp xếp theo hệ trục dọc chung (Trục 1 đến Tr
 ├── 02. OUTPUT/                     # Hình ảnh chụp nghiệm thu chi tiết và toàn cảnh
 ├── docs/                           # Tài liệu kỹ thuật
 │   ├── PROJECT_STATUS.md           # Báo cáo chi tiết tiến độ B01 & B02, tọa độ then chốt
-│   └── DRAFTING_RULES.md           # Bộ quy tắc vẽ AutoCAD chuẩn (layer, polyline, hatch, block)
+│   ├── DRAFTING_RULES.md           # Bộ quy tắc vẽ AutoCAD chuẩn (layer, polyline, hatch, block)
+│   └── AI_AUTOLISP_GUIDE.md        # Cẩm nang toàn diện hướng dẫn AI & Kỹ sư sử dụng 91 AutoLISP
 ├── scripts/                        # Bộ công cụ tự động hóa
-│   ├── lisp/                       # Toàn bộ tiện ích AutoLISP (.lsp) phân loại chuyên nghiệp
-│   │   ├── b01_standards/          # LISP trích xuất chuẩn mực, khung tên và lưới trục B01
-│   │   ├── b02_implementation/     # LISP dựng hình, dọn hatch, mirror và fix lỗi B02
-│   │   └── common_tools/           # Bộ thư viện AutoLISP vẽ kiến trúc dùng chung
+│   ├── lisp/                       # Hệ thống 91 tiện ích AutoLISP phân loại thành 9 Module chuẩn:
+│   │   ├── b01_standards/          # LISP trích xuất chuẩn mực, khung tên và lưới trục B01 (3 files)
+│   │   ├── b02_implementation/     # LISP dựng hình, dọn hatch, mirror và fix lỗi B02 (9 files)
+│   │   ├── architecture/           # Tiện ích Kiến trúc: cửa, thang, dốc mái, diện tích (5 files)
+│   │   ├── structure/              # Tiện ích Kết cấu: cột, dầm, giằng, ti, bu lông, bản mã, portal (24 files)
+│   │   ├── annotation/             # Kích thước, cao độ, dóng hàng dim, căn lề leader, khoanh mây (12 files)
+│   │   ├── text_tables/            # Xử lý text, cộng trừ số, số tăng dần, trích xuất bảng/excel (12 files)
+│   │   ├── blocks/                 # Đổi base point không xê dịch, nhân bản, đổi tên, thay thế block (5 files)
+│   │   ├── cad_cleanup/            # Làm phẳng Z=0, nối nét kín, tính chiều dài, bẻ ngắt đường (10 files)
+│   │   └── layers_views_print/     # Phím tắt layer, khóa viewport layout, in ấn hàng loạt, sửa font (11 files)
 │   └── python/                     # Các script Python điều khiển AutoCAD qua ActiveX COM
 ├── LA325.dwg                       # Bản vẽ AutoCAD chính (chứa cả B01 và B02)
 └── .gitignore                      # Loại bỏ các file tạm của AutoCAD (*.bak, *.dwl, *.dwl2)
@@ -70,40 +77,18 @@ Bộ công cụ dựng hình và hoàn thiện chi tiết Nhà B02 theo hồ sơ
 | `do_mirror.lsp` | `DO_MIRROR` | Đối xứng thiết bị vệ sinh, gạch lát, cửa đi WC trái theo WC phải |
 | `fix_three_issues.lsp` | `FIX_ALL` | Bổ sung cột Trục 6-C, khép kín tường Trục C, chia đều bậc cầu thang 250mm |
 
-### C. Nhóm Thư viện Dùng chung (`scripts/lisp/common_tools/`)
-Bộ công cụ AutoCAD chuẩn hóa được tích hợp sẵn từ bộ LISP thực chiến của kỹ sư để vẽ nhanh và tự động trên bất kỳ thiết bị nào:
+### C. Hệ thống 7 Module Thư viện Chuyên ngành (`scripts/lisp/`)
+Toàn bộ 79 tiện ích CAD thực chiến từ kho dữ liệu kỹ sư được chuẩn hóa và phân vào 7 module chức năng:
 
-| File LISP | Lệnh gọi | Chức năng chính |
-| :--- | :--- | :--- |
-| `TT_CHUYEN_Z_VE_0.lsp` | `ZZZ` | Đưa toàn bộ đối tượng về $Z = 0$ (làm phẳng bản vẽ 2D, chống lỗi bắt điểm lệch cao độ) |
-| `joinline.lsp` | `nn` | Nối các đoạn Line/Arc rời rạc thành Polyline khép kín (`Closed`) trước khi Hatch |
-| `TT_SNAP_ON.lsp` | `5` | Bật toàn bộ chế độ Osnap bắt điểm chuẩn |
-| `LM_ChangeBlockBasePoint.lsp` | `CBP`, `CBC` | Đổi điểm đặt (base point) Block mà không làm lệch vị trí chèn trong bản vẽ |
-| `LM_CopyRenameBlock.lsp` | `cb`, `rr` | Nhân bản và đổi tên block trực tiếp trong bản vẽ |
-| `TT_THAY_THE_BLOCK.lsp` | `TTB` | Thay thế hàng loạt block cũ bằng block mới |
-| `TT_STAIRCASE_V1.lsp` | `cc` | Vẽ và chia bậc cầu thang tự động nhanh chóng và chính xác |
-| `TT_DOOR.lsp` | `door` | Chèn cửa đi kiến trúc tự động theo kích thước tùy chỉnh |
-| `TT_DAT_COT_TRUC.lsp` | `SCL1` | Tự động đặt cột kết cấu tại các giao điểm lưới trục |
-| `TT_TAO_DIM.lsp` | `DS` | Thiết lập và tạo kiểu đường kích thước (DimStyle) kiến trúc chuẩn |
-| `TT_TDTL_LAYER_DIM.lsp` | `TDTL` | Thay đổi tỉ lệ và đồng bộ nhanh layer cho hệ thống kích thước |
-| `TT_SPACE_DIM.lsp` | `SD` | Dóng đều khoảng cách giữa các hàng kích thước (Space Dimension) |
-| `TT_TEXT_DIM_BELOW.lsp` | `TD` | Thêm ghi chú text bên dưới đường dimension |
-| `TT_UPDATE_CAO_DO.lsp` | `CAODO` | Cập nhật tự động ký hiệu và giá trị cao độ trên mặt cắt/mặt đứng |
-| `TT_VE_DO_DOC_SLOPE.lsp` | `S1` | Vẽ mũi tên và ký hiệu độ dốc mái (Slope $i\%$) |
-| `TT_DRAW_SLOPE_XLINE.lsp` | `s2` | Bắn đường dóng XLINE vô tận theo góc dốc mái |
-| `TT_CANH_LEADER_TEXT.lsp` | `all`, `alr` | Căn lề trái / lề phải cho Leader và Text ghi chú thẳng hàng |
-| `TT_COPY_TEXT.lsp` | `d1` | Sao chép nội dung text này sang text khác bằng 1 cú click |
-| `TT_CONVERT_FIELD_TO_TEXT.lsp` | `f2t` | Chuyển Dynamic Field thành Text tĩnh để chống lỗi nhảy số/font |
-| `TT_KHOANH_MAY_REV.lsp` | `REV` | Vẽ đám mây Revision khoanh vùng các vị trí sửa đổi theo comment |
-| `TT_KHOA_VIEWPORT.lsp` | `W` | Khóa / mở khóa khung nhìn Viewport trong Layout chống zoom lệch tỉ lệ |
-| `TT_LAYON_ALL.lsp` | `T5` | Bật lại toàn bộ các layer đang bị ẩn |
-| `tl.lsp` | `TL` | Đo và tính tổng chiều dài hàng loạt đối tượng Curve/Line |
-| `TONG_HOP_Chinh_Dim_Layer.lsp` | `DS`, `TOP`, `HI`, `Q1`, `Q2`... | Bộ lệnh tắt thao tác siêu tốc với Dimension (đưa về layer dim, canh lề) |
-| `TONG_HOP_Chuyen_Layer.lsp` | `31`, `22`, `21`, `11`, `32`... | Bộ phím tắt gán nhanh đối tượng về layer tương ứng (31: Tường, 22: Hatch, 21: Dim...) |
-| `TONG_HOP_Chinh_Sua_Text.lsp` | `TC`, `tv`, `yu`, `YY`, `XO`... | Căn chỉnh lề, đổi hoa/thường, nối chuỗi text |
-| `TT_CANH_DIEM_DAU_LINE.lsp` | `BLB`, `BLT`, `BLL`, `BLR` | Căn dóng điểm đầu của các line/polyline theo 4 hướng |
-| `TT_XUAT_DANH_SACH_BAN_VE.lsp` | `eatt` | Tự động trích xuất danh mục bản vẽ từ attribute khung tên |
-| `TT_TIEN_ICH_KHAC.lsp` | `InVis`, `Vis`, `SF`, `EE`... | Tiện ích ẩn hiện đối tượng, lọc chọn nhanh, tìm kiếm |
+1. **`architecture/` (Kiến trúc):** Cửa đi (`door`), cầu thang bộ (`cc`), độ dốc mái (`S1`, `s2`), diện tích phòng (`32`).
+2. **`structure/` (Kết cấu & Thép tiền chế):** Đặt cột trục (`SCL1`), lưới trục (`VLT`, `DLT`), dầm cột MC6 (`fc`, `wc`), thép tổ hợp (`VI`), giằng X (`x1`), ti giằng (`TI`), bu lông neo (`BLN`, `BDT`), bản mã ngầm (`BMN`), endplate (`1E`), Portal frame (`PORTAL`).
+3. **`annotation/` (Kích thước & Chú thích):** Tạo dim (`DS`), căn chỉnh dim (`TOP`, `HI`), đổi tỉ lệ dim (`TDTL`), dóng đều khoảng cách (`SD`), cắt/bẻ chân dim (`CD`, `BD`), ghi chú chân dim (`TD`), cao độ (`CAODO`), căn lề leader (`all`, `alr`), khoanh mây revision (`REV`).
+4. **`text_tables/` (Văn bản & Bảng biểu):** Copy text (`d1`), sửa text (`TC`), cộng trừ số trong text (`RT`, `CTT`), số thứ tự tăng dần (`cot`), chuyển field sang text tĩnh (`f2t`), sửa attribute block (`edt`), thống kê bảng (`tkt`), xuất tọa độ ra CAD/Excel (`XTD`, `atx`), xuất danh mục bản vẽ (`eatt`, `EAT1`).
+5. **`blocks/` (Quản lý Block):** Đổi base point không xê dịch (`CBP`), nhân bản & đổi tên block (`cb`, `rr`, `DTB`), thay block hàng loạt (`TTB`).
+6. **`cad_cleanup/` (Làm sạch & Chuẩn hóa):** Làm phẳng Z=0 (`ZZZ`), nối nét kín (`nn`), đo tổng chiều dài (`TL`), bẻ ngắt đường 1 điểm (`brn`), rải đối tượng (`rdt`), đổi về ByLayer (`lc`), căn điểm đầu (`BLB`..`BLR`), bật Osnap chuẩn (`5`).
+7. **`layers_views_print/` (Layer, Viewport & In ấn):** Phím tắt chuyển layer (`31`, `22`, `21`...), bật lại layer (`T5`), lọc đối tượng (`FF`, `ffd`, `fft`...), ẩn hiện nhanh (`InVis`, `Vis`), khóa viewport (`W`, `Z`), in ấn hàng loạt ra PDF (`IN`), sửa lỗi font tiếng Việt (`convertfont`).
+
+> 📖 **Xem hướng dẫn chi tiết từng lệnh, workflow và lưu ý phòng tránh lỗi tại:** [docs/AI_AUTOLISP_GUIDE.md](file:///E:/02.%20PART%20TIME/LA635/docs/AI_AUTOLISP_GUIDE.md)
 
 ---
 
@@ -118,8 +103,8 @@ cd LA635
 ### B. Mở và kiểm tra bản vẽ
 1. Mở file `LA325.dwg` bằng AutoCAD 2020 trở lên.
 2. Kiểm tra B01 (ở trên) và B02 (ở dưới) được gióng thẳng hàng theo hệ lưới trục Trục 1 - 8.
-3. Đọc tài liệu chi tiết tại `docs/PROJECT_STATUS.md` để nắm rõ các mốc tọa độ và các việc cần làm tiếp theo.
-4. Tận dụng thư viện trong `scripts/lisp/common_tools/` và `scripts/lisp/b01_standards/` để tiếp tục hoàn thiện hồ sơ thiết kế.
+3. Đọc tài liệu chi tiết tại `docs/PROJECT_STATUS.md` và quy tắc vẽ tại `docs/DRAFTING_RULES.md`.
+4. Tra cứu cách dùng 91 file AutoLISP trong `docs/AI_AUTOLISP_GUIDE.md` để triển khai tiếp các bản vẽ tầng 2, mặt đứng, mặt cắt và chi tiết liên kết.
 
 ---
 

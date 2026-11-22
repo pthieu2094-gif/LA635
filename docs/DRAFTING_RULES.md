@@ -73,6 +73,8 @@ Tài liệu này tổng hợp toàn bộ các quy tắc, tiêu chuẩn và quy �
 
 ## 6. Quy tắc sử dụng Bộ công cụ AutoLISP cho AI & Kỹ sư
 
+> 📖 **Tra cứu chi tiết toàn bộ 91 AutoLISP, lệnh gọi và workflow thực chiến tại:** [docs/AI_AUTOLISP_GUIDE.md](file:///E:/02.%20PART%20TIME/LA635/docs/AI_AUTOLISP_GUIDE.md)
+
 Để tối ưu hóa tốc độ và độ chính xác, AI và kỹ sư khi nhận tác vụ trên bản vẽ CAD phải tuân thủ các quy tắc sau:
 
 ### A. Chuẩn hóa hình học & Chống lỗi 2D

@@ -1,0 +1,22 @@
+;LISP VE DUONG BAO BU LONG NEO, CHI TIET
+;THANH TRI AUTOCAD
+(defun c:BDT()
+  (setvar "cmdecho" 0)
+  (command "layer" "m" "TT-DB" "C" "1" "" "L" "HIDDEN" "" "")
+  (setq occho (getvar "osmode"))
+  (setq p1(getpoint"First Point"))
+  (setq p2(getpoint p1"Second Point"))
+  (setq goc (angle p1 p2))
+  (setq p1a (polar p1 (+ goc (/ pi 2)) 600))
+  (setq p1b (polar p1 (+ goc (/ pi -2)) 600))
+  (setq p2a (polar p2 (+ goc (/ pi 2)) 600))
+  (setq p2b (polar p2 (+ goc (/ pi -2)) 600))
+  (setvar "osmode" 16384)
+  (command "clayer" "TT-DB")
+  (command "rectang" "F" 250 p1a p2b)
+  (setq obj (entlast))
+  (command "change" obj "" "P" "C" 1 "")
+  (command "clayer" "31 Drawing")
+  (setvar "osmode" occho)
+  (command "rectang" "F" 0 ESC)
+  (princ));THE END

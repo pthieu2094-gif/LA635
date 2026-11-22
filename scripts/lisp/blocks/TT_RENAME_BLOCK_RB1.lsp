@@ -1,0 +1,6 @@
+(defun c:RB1(/ DT1 blockname)
+  (setq DT1 (car(entsel "Select Block to RENAME")))
+  (setq ob1 (vlax-get-property(vlax-ename->vla-object DT1) 'effectivename))
+  (setq blockname (getstring (strcat "\nNew Block NAME <" ob1 ">") T))
+  (command "-rename" "B" ob1 blockname)
+  (princ))
