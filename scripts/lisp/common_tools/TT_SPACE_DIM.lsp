@@ -1,0 +1,33 @@
+(defun c:SD(/ dis1 p1 p2 ss lengss dim1 p5 n)
+(setq dis1(* 8 (getvar "dimscale")))
+(setq p1(cdr(assoc 10 (entget(car(entsel"Select DIM BASE")))))) 
+(setq ss( ssget (list (cons 0  "DIMENSION") '(-4 . "<NOT") (cons 10 p1) '(-4 . "NOT>"))))
+(setq axis (cond (axis)("H")))
+(initget "H V")
+(setq axis (cond ((getkword (strcat "\Direction [Hor/Ver]<" axis ">")))(axis)))
+(COND ((eq axis "V")
+	(setq lengss (sslength ss))
+	(setq n 0)
+	(REPEAT lengss
+    	(setq dim1 (entget(ssname ss n)))
+    	(setq p5 (cdr(assoc 10 dim1)))
+  	(IF  (< (car p5) (car p1))
+    	(setq p2 (list (- (car p1) dis1) (- (cadr p1) dis1)))
+    	(setq p2 (list (+ (car p1) dis1) (+ (cadr p1) dis1))))    
+    	(entmod(subst(cons 10 p2)(assoc 10 dim1) dim1))
+    	(setq n (+ 1 n))))
+     ((eq axis "H")
+      	(setq lengss (sslength ss))
+	(setq n 0)
+	(REPEAT lengss
+    	(setq dim1 (entget(ssname ss n)))
+    	(setq p5 (cdr(assoc 10 dim1)))
+  	(IF  (< (cadr p5)(cadr p1))
+    	(setq p2 (list (- (car p1) dis1) (- (cadr p1) dis1)))
+    	(setq p2 (list (+ (car p1) dis1) (+ (cadr p1) dis1))))    
+    	(entmod(subst(cons 10 p2)(assoc 10 dim1) dim1))
+    	(setq n (+ 1 n))))
+      ))
+      
+
+

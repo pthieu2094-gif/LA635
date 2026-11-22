@@ -1,0 +1,5 @@
+(defun c:s2(/ slope p1 p2 )
+  (setq slope (getreal "SLOPE %"))
+  (setq p1 (getpoint "First point"))
+  (setq p2 (list (+ 100 (car p1)) (+ (cadr p1) slope)))
+  (command "XLINE" p1 p2 ""))

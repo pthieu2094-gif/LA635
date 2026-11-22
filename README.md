@@ -71,20 +71,39 @@ Bộ công cụ dựng hình và hoàn thiện chi tiết Nhà B02 theo hồ sơ
 | `fix_three_issues.lsp` | `FIX_ALL` | Bổ sung cột Trục 6-C, khép kín tường Trục C, chia đều bậc cầu thang 250mm |
 
 ### C. Nhóm Thư viện Dùng chung (`scripts/lisp/common_tools/`)
-Bộ công cụ AutoCAD chuẩn hóa được tích hợp sẵn để vẽ nhanh trên bất kỳ thiết bị nào:
+Bộ công cụ AutoCAD chuẩn hóa được tích hợp sẵn từ bộ LISP thực chiến của kỹ sư để vẽ nhanh và tự động trên bất kỳ thiết bị nào:
 
 | File LISP | Lệnh gọi | Chức năng chính |
 | :--- | :--- | :--- |
+| `TT_CHUYEN_Z_VE_0.lsp` | `ZZZ` | Đưa toàn bộ đối tượng về $Z = 0$ (làm phẳng bản vẽ 2D, chống lỗi bắt điểm lệch cao độ) |
+| `joinline.lsp` | `nn` | Nối các đoạn Line/Arc rời rạc thành Polyline khép kín (`Closed`) trước khi Hatch |
+| `TT_SNAP_ON.lsp` | `5` | Bật toàn bộ chế độ Osnap bắt điểm chuẩn |
+| `LM_ChangeBlockBasePoint.lsp` | `CBP`, `CBC` | Đổi điểm đặt (base point) Block mà không làm lệch vị trí chèn trong bản vẽ |
+| `LM_CopyRenameBlock.lsp` | `cb`, `rr` | Nhân bản và đổi tên block trực tiếp trong bản vẽ |
+| `TT_THAY_THE_BLOCK.lsp` | `TTB` | Thay thế hàng loạt block cũ bằng block mới |
 | `TT_STAIRCASE_V1.lsp` | `cc` | Vẽ và chia bậc cầu thang tự động nhanh chóng và chính xác |
 | `TT_DOOR.lsp` | `door` | Chèn cửa đi kiến trúc tự động theo kích thước tùy chỉnh |
 | `TT_DAT_COT_TRUC.lsp` | `SCL1` | Tự động đặt cột kết cấu tại các giao điểm lưới trục |
 | `TT_TAO_DIM.lsp` | `DS` | Thiết lập và tạo kiểu đường kích thước (DimStyle) kiến trúc chuẩn |
 | `TT_TDTL_LAYER_DIM.lsp` | `TDTL` | Thay đổi tỉ lệ và đồng bộ nhanh layer cho hệ thống kích thước |
+| `TT_SPACE_DIM.lsp` | `SD` | Dóng đều khoảng cách giữa các hàng kích thước (Space Dimension) |
+| `TT_TEXT_DIM_BELOW.lsp` | `TD` | Thêm ghi chú text bên dưới đường dimension |
 | `TT_UPDATE_CAO_DO.lsp` | `CAODO` | Cập nhật tự động ký hiệu và giá trị cao độ trên mặt cắt/mặt đứng |
-| `joinline.lsp` | `nn` | Nối các đoạn Line/Arc rời rạc thành Polyline khép kín (`Closed`) |
+| `TT_VE_DO_DOC_SLOPE.lsp` | `S1` | Vẽ mũi tên và ký hiệu độ dốc mái (Slope $i\%$) |
+| `TT_DRAW_SLOPE_XLINE.lsp` | `s2` | Bắn đường dóng XLINE vô tận theo góc dốc mái |
+| `TT_CANH_LEADER_TEXT.lsp` | `all`, `alr` | Căn lề trái / lề phải cho Leader và Text ghi chú thẳng hàng |
+| `TT_COPY_TEXT.lsp` | `d1` | Sao chép nội dung text này sang text khác bằng 1 cú click |
+| `TT_CONVERT_FIELD_TO_TEXT.lsp` | `f2t` | Chuyển Dynamic Field thành Text tĩnh để chống lỗi nhảy số/font |
+| `TT_KHOANH_MAY_REV.lsp` | `REV` | Vẽ đám mây Revision khoanh vùng các vị trí sửa đổi theo comment |
+| `TT_KHOA_VIEWPORT.lsp` | `W` | Khóa / mở khóa khung nhìn Viewport trong Layout chống zoom lệch tỉ lệ |
+| `TT_LAYON_ALL.lsp` | `T5` | Bật lại toàn bộ các layer đang bị ẩn |
 | `tl.lsp` | `TL` | Đo và tính tổng chiều dài hàng loạt đối tượng Curve/Line |
 | `TONG_HOP_Chinh_Dim_Layer.lsp` | `DS`, `TOP`, `HI`, `Q1`, `Q2`... | Bộ lệnh tắt thao tác siêu tốc với Dimension (đưa về layer dim, canh lề) |
 | `TONG_HOP_Chuyen_Layer.lsp` | `31`, `22`, `21`, `11`, `32`... | Bộ phím tắt gán nhanh đối tượng về layer tương ứng (31: Tường, 22: Hatch, 21: Dim...) |
+| `TONG_HOP_Chinh_Sua_Text.lsp` | `TC`, `tv`, `yu`, `YY`, `XO`... | Căn chỉnh lề, đổi hoa/thường, nối chuỗi text |
+| `TT_CANH_DIEM_DAU_LINE.lsp` | `BLB`, `BLT`, `BLL`, `BLR` | Căn dóng điểm đầu của các line/polyline theo 4 hướng |
+| `TT_XUAT_DANH_SACH_BAN_VE.lsp` | `eatt` | Tự động trích xuất danh mục bản vẽ từ attribute khung tên |
+| `TT_TIEN_ICH_KHAC.lsp` | `InVis`, `Vis`, `SF`, `EE`... | Tiện ích ẩn hiện đối tượng, lọc chọn nhanh, tìm kiếm |
 
 ---
 

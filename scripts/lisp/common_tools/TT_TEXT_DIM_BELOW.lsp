@@ -1,0 +1,16 @@
+(defun c:TD (/ text textlist)
+(setvar "CMDECHO" 0)
+(setq objectlist(entget(car(entsel))))
+(setq giatrigoc (cdr(assoc 1 objectlist)))
+(IF (eq giatrigoc "")
+  		(setq text (strcat "<>\\X" (getstring "Text below dimension" T)))
+     (progn
+       (setq symbol (vl-string-search "\\" giatrigoc))
+       (COND ((eq symbol nil)    
+  		(setq text (strcat giatrigoc "\\X" (getstring "Text below dimension" T))))
+	     ((/= symbol nil)	      
+		(setq text (strcat (substr giatrigoc 1 symbol) "\\X" (getstring "Text below dimension" T)))))))
+	     
+(setq textlist (cons 1 text))
+(entmod(subst textlist (assoc 1 objectlist) objectlist))
+(princ))

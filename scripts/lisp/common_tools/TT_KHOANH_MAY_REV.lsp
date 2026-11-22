@@ -1,0 +1,18 @@
+;;;========== LISP VE DAM MAY==========;;;
+;;; AUTHOR: THANH TRI;;;
+(defun c:REV (/ b p1 p2 a f1)
+  (setvar "CMDECHO" 0)
+  (command "layer" "m" "TT-REV" "C" "T" "200,4,4" "" "")
+  (command "layer" "m" "31 Drawing" "C" "7" "" "")
+  (setq b (getvar "dimscale"))
+  (setvar "orthomode" 0)
+  (setq p1 (getpoint "FIRST CORNER")
+	p2 (getcorner p1"SECOND CORNER"))
+  (command "rectang" p1 p2)
+  (setq a (entlast))
+  (command "clayer" "TT-REV")
+  (command ".revcloud" "a" ( * b 3)  ( * b 3) "s" "c" "o" a "" )
+  (setq f1 (entlast))
+  (setvar "orthomode" 1)
+  (command "clayer" "31 Drawing")
+  (princ))

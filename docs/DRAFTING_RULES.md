@@ -68,3 +68,49 @@ Tài liệu này tổng hợp toàn bộ các quy tắc, tiêu chuẩn và quy �
    - Khi chạy lệnh AutoLISP có hatch, luôn dùng `_.-HATCH` (chế độ dòng lệnh có dấu gạch ngang `-`) hoặc tạo Hatch qua ActiveX COM (`AddHatch`) để tránh bị kẹt dialog/prompt.
 3. **Quản lý Handle & Tránh Duplicate:**
    - Khi mirror hoặc copy đối tượng, kiểm tra kỹ để tránh tạo ra 2 lớp đối tượng trùng đè lên nhau (duplicate entities).
+
+---
+
+## 6. Quy tắc sử dụng Bộ công cụ AutoLISP cho AI & Kỹ sư
+
+Để tối ưu hóa tốc độ và độ chính xác, AI và kỹ sư khi nhận tác vụ trên bản vẽ CAD phải tuân thủ các quy tắc sau:
+
+### A. Chuẩn hóa hình học & Chống lỗi 2D
+- **Làm phẳng bản vẽ ($Z = 0$):** Khi bắt đầu phiên làm việc hoặc trước khi đo đạc, bắt điểm, chạy lệnh `ZZZ` (`TT_CHUYEN_Z_VE_0.lsp`) để đưa toàn bộ tọa độ $Z$ về $0.0$, triệt tiêu hoàn toàn lỗi bắt điểm xiên trong không gian 3D.
+- **Khép kín Polyline trước khi Hatch:** Mọi nét tường và vách vẽ bằng line rời phải chạy lệnh `nn` (`joinline.lsp`) để nối thành Polyline kín (`Closed`), tuyệt đối không hatch trên các đoạn hở.
+- **Bắt điểm chuẩn:** Khi vẽ thủ công hoặc kiểm tra, gõ lệnh `5` (`TT_SNAP_ON.lsp`) để kích hoạt đầy đủ các chế độ Osnap thiết yếu (Endpoint, Midpoint, Center, Intersection, Perpendicular).
+
+### B. Thao tác với Block & Thư viện
+- **Đổi điểm đặt Block:** Khi cần thay đổi base point của Block mà không muốn các block đã đặt trong bản vẽ bị nhảy vị trí, dùng `CBP` hoặc `CBC` (`LM_ChangeBlockBasePoint.lsp`).
+- **Nhân bản và đổi tên Block:** Khi tạo biến thể mới từ block có sẵn (ví dụ: tạo cửa WC trái từ cửa WC phải), dùng lệnh `cb` hoặc `rr` (`LM_CopyRenameBlock.lsp`).
+- **Thay thế block hàng loạt:** Khi cập nhật mẫu thiết bị vệ sinh, đèn, cửa mới, dùng lệnh `TTB` (`TT_THAY_THE_BLOCK.lsp`).
+
+### C. Triển khai Kích thước (Dimension) & Cao độ
+- **Thiết lập DimStyle:** Gõ `DS` (`TT_TAO_DIM.lsp` hoặc `TONG_HOP_Chinh_Dim_Layer.lsp`) để thiết lập style dim kiến trúc chuẩn.
+- **Đồng bộ layer & tỉ lệ dim:** Dùng lệnh `TDTL` (`TT_TDTL_LAYER_DIM.lsp`) để gán dim về layer `21 Dim` và scale chuẩn.
+- **Dóng khoảng cách đều giữa các đường Dim:** Sau khi dim chi tiết và tổng thể, dùng lệnh `SD` (`TT_SPACE_DIM.lsp`) để các đường gióng cách đều nhau chuẩn xác.
+- **Ghi chú text dưới chân dim:** Dùng lệnh `TD` (`TT_TEXT_DIM_BELOW.lsp`) khi cần thêm chữ phụ chú (như "KT", "THÔNG THỦY").
+- **Cập nhật mốc cao độ:** Sử dụng lệnh `CAODO` (`TT_UPDATE_CAO_DO.lsp`) để cập nhật block mốc cao độ kiến trúc trên mặt cắt/mặt đứng.
+
+### D. Triển khai Cầu thang, Cửa & Độ dốc
+- **Cầu thang bộ:** Sử dụng lệnh `cc` (`TT_STAIRCASE_V1.lsp`) để tính toán số bậc và vẽ mặt cắt thang chuẩn bề rộng $250\text{ mm}$.
+- **Cửa kiến trúc:** Sử dụng lệnh `door` (`TT_DOOR.lsp`) để vẽ nhanh block cửa theo kích thước lọt lòng.
+- **Độ dốc mái (Slope):**
+  - Dùng `S1` (`TT_VE_DO_DOC_SLOPE.lsp`) để vẽ tam giác độ dốc và ghi chú $i\%$.
+  - Dùng `s2` (`TT_DRAW_SLOPE_XLINE.lsp`) để bắn đường dóng phụ trợ `XLINE` theo đúng góc dốc mái thoát nước.
+
+### E. Ghi chú, Text & Quản lý sửa đổi (Revision)
+- **Căn lề Leader & Text:** Dùng lệnh `all` (căn trái) hoặc `alr` (căn phải) (`TT_CANH_LEADER_TEXT.lsp`) để hệ thống ghi chú thẳng hàng, ngay ngắn.
+- **Copy nội dung Text siêu tốc:** Dùng lệnh `d1` (`TT_COPY_TEXT.lsp`) để sao chép nội dung từ text mẫu sang text cần sửa.
+- **Chuyển Field sang Text tĩnh:** Khi xuất bản vẽ nộp hoặc chuyển thiết bị khác, chạy lệnh `f2t` (`TT_CONVERT_FIELD_TO_TEXT.lsp`) để cố định nội dung, chống lỗi hiển thị `####`.
+- **Khoanh mây sửa đổi (Revision):** Khi tiếp nhận comment và chỉnh sửa bản vẽ, dùng lệnh `REV` (`TT_KHOANH_MAY_REV.lsp`) để khoanh mây xung quanh vùng thay đổi.
+
+### F. Thao tác Layer & Khung nhìn Viewport
+- **Chuyển layer nhanh bằng phím tắt:**
+  - Nhập `31`: Chuyển đối tượng sang layer tường (`31 Drawing`).
+  - Nhập `22`: Chuyển đối tượng sang layer mặt cắt hatch (`22 Hatch`).
+  - Nhập `21`: Chuyển đối tượng sang layer kích thước (`21 Dim`).
+  - Nhập `11`: Chuyển đối tượng sang layer cột (`11 Column`).
+  - Nhập `32`: Chuyển đối tượng sang layer trục định vị (`32 Gridline`).
+- **Bật nhanh toàn bộ layer:** Gõ `T5` (`TT_LAYON_ALL.lsp`) để hiển thị lại toàn bộ các đối tượng đang bị ẩn.
+- **Khóa khung nhìn Viewport:** Gõ `W` (`TT_KHOA_VIEWPORT.lsp`) trong Layout để khóa viewport, ngăn việc vô tình zoom làm sai lệch tỉ lệ bản vẽ in.
