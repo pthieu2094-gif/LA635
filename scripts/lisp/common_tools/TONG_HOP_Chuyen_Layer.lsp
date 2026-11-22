@@ -1,0 +1,223 @@
+;;;--------------------------------------------------------------------;
+;;;LENH TAO LAYER MAT DINH
+(DEFUN C:asdf()
+	(command "-view" "TOP" "")
+	(setvar "gridmode" 0)
+	(command "NAVVCUBE" "off")
+	(setvar "SNAPMODE" 0)
+  (COMMAND "-LAYER" "N" "31 Drawing" "L" "Continuous" "31 Drawing" "C" 7 "31 Drawing" "")
+  (COMMAND "-LAYER" "N" "33 Flange steel" "L" "Continuous" "33 Flange steel" "C" 3 "33 Flange steel" "")
+  (COMMAND "-LAYER" "N" "32 Gridline" "L" "CENTER" "32 Gridline" "C" 251 "32 Gridline" "")
+  (COMMAND "-LAYER" "N" "21 Dim" "L" "Continuous" "21 Dim" "C" 251 "21 Dim" "")
+  (COMMAND "-LAYER" "N" "22 Hatch" "L" "Continuous" "22 Hatch" "C" 8 "22 Hatch" "")
+  (COMMAND "-LAYER" "N" "37 Purlin" "L" "DASHED" "37 Purlin" "C" 33 "37 Purlin" "")
+  (COMMAND "-LAYER" "N" "23 Tole Hatch" "L" "Continuous" "23 Tole Hatch" "C" 146 "23 Tole Hatch" "")
+  (COMMAND "-LAYER" "N" "HIDDEN" "L" "HIDDEN" "HIDDEN" "C" 251 "HIDDEN" "")
+  (COMMAND "-LAYER" "N" "36 Tole " "L" "Continuous" "36 Tole " "C" 1 "36 Tole " "")
+  (COMMAND "-LAYER" "N" "34 Border (bold wide)_Bracing_Flashing" "L" "Continuous" "34 Border (bold wide)_Bracing_Flashing" "C" 4 "34 Border (bold wide)_Bracing_Flashing" "")
+  (COMMAND "-LAYER" "N" "41 Steel section" "L" "Continuous" "41 Steel section" "C" 220 "41 Steel section" "")
+  (COMMAND "-LAYER" "N" "42 Steel plate" "L" "Continuous" "42 Steel plate" "C" 1 "42 Steel plate" "")
+  (COMMAND "-LAYER" "N" "43 Bolt" "L" "Continuous" "43 Bolt" "C" 2 "43 Bolt" "")
+  (COMMAND "-LAYER" "N" "38 Solid rod" "L" "Continuous" "38 Solid rod" "C" 252 "38 Solid rod" "")
+  (COMMAND "-LAYER" "N" "A-5" "L" "Continuous" "A-5" "C" 141 "A-5" "")
+  (COMMAND "-LAYER" "N" "6" "L" "Continuous" "6" "C" 6 "6" "")
+  (COMMAND "-LAYER" "N" "6A" "L" "Hidden" "6A" "C" 6 "6A" "")
+  (COMMAND "-LAYER" "N" "2V" "L" "Hidden" "2V" "C" 252 "2V" "")
+  (COMMAND "-LAYER" "N" "1" "L" "Continuous" "1" "C" 1 "1" "")
+  (COMMAND "-LAYER" "N" "35 Border (light wide)" "L" "Continuous" "35 Border (light wide)" "C" 5 "35 Border (light wide)" "")
+  (COMMAND "-LAYER" "N" "12 Text-title" "L" "Continuous" "12 Text-title" "C" 20 "12 Text-title" "")
+	(COMMAND "LTSCALSE" 5)
+	(COMMAND "ZOOM" "a")
+(command "regen")
+(princ));
+
+;CAC HAM GOI LAYER
+(defun c:31 () (setvar "clayer" "31 Drawing"))
+;;;--------------------------------------------------------------------;
+(defun c:doc() (command ".line" pause (strcat "@10," (rtos (/ (getreal "\nVao do doc %: ") 10.0))) ""))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:23 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "23 Tole Hatch"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:38 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "38 Solid rod"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:35 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "35 Border (light wide)"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:a5 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "A-5"  "")
+(Princ))  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:31A ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "31 Drawing"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:33 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "33 Flange steel"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:32 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "32 Gridline"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:21 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "21 Dim"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:22 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "22 Hatch"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+(Defun c:37 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "37 Purlin"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:25 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "HIDDEN"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:36 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "36 Tole"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:34 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "34 Border (bold wide)_Bracing_Flashing"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:41 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+
+  (command "chprop" chuyen "" "la" "41 Steel section"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:42 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "42 Steel plate"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:43 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "43 Bolt"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:14 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "14 Text in notation"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:6 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "6"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:2V ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "2V"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:6A ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "6A"  "")
+(Princ))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(Defun c:T1 ( )  
+  (Prompt "\nChon doi tuong muon chuyen layer...")
+  (Setq chuyen (Ssget))
+  (command "chprop" chuyen "" "la" "12 Text-title"  "")
+(Princ))
+;;;----------------------------------------------------------------------------
+;;;DOI TAT CA DIM VE LAYER 21, HATCH LAYER 22, TEXT LAYER 11
+(defun CHANGE-LAYER (_TYPE LAYER / OBJS)
+(setq OBJS (ssget "X" (list (cons 0 _TYPE))))
+(if (not (tblsearch "layer" LAYER))
+ (command ".layer" "m" LAYER "")
+);_ end if
+(command ".chprop" OBJS "" "la" LAYER "")
+(princ)
+);_ end defun
+(defun C:D2D (/ OBJS) (CHANGE-LAYER "DIMENSION" "21 Dim"))
+(defun C:H2H (/ OBJS) (CHANGE-LAYER "HATCH" "22 Hatch"))
+(defun C:T2T (/ OBJS) (CHANGE-LAYER "*TEXT" "11 Text-content"))
+;;;----------------------------------------------------------------------------
+;;;DOI NET VIEWPORT VE LAYER DEFPOINT
+(defun c:V2V (/ typ sset) (princ "\nChuyen doi tuong VIEWPORT ve 1 layer:")
+(setvar "TILEMODE" 0)	; To layout
+(Setq typ (cons 0 "VIEWPORT"))
+(setq sset (ssget (list typ)))
+(COMMAND "_.CHANGE" sset "" "p" "LA" "Defpoints" "")
+(princ))
+;;;----------------------------------------------------------------------------
+;;;CHUYEN BLOCK VE LAYER 31
+(defun c:B2B (/ typ sset) (princ "\nChuyen doi tuong Block ve 1 layer:")
+(Setq typ (cons 0 "INSERT"))
+(setq sset (ssget (list typ)))
+(COMMAND "_.CHANGE" sset "" "p" "LA" "31 Drawing" "")
+(princ))
+;;;----------------------------------------------------------------------------
+;;;CHUYEN VIEWPORT DUOC CHON VE LAYER DEFPOINT
+(defun C:TL ( / ss)
+(princ "\nChon cac doi tuong can thay doi Layer ve Defpoints: ")
+(setq ss (ssget))
+(if (not (tblsearch "layer" "Defpoints"))
+ (command ".layer" "m" "Defpoints" ""))
+(command ".chprop" ss "" "la" "Defpoints" "")
+(princ))
+
+
+;;;----------------------------------------------------------------------------
+(defun C:ke(/ OS p1 p2 p1r p2r p1L p2L)
+  (setq OS (GETVAR "OSMODE"))
+  (setvar "CMDECHO" 0)
+  (command "ucs" "w")
+  (setvar "OSMODE" 167)
+  (setq P1 (getpoint " Chon diem 1 : ")
+  	P2 (getpoint P1 " Chon diem 2 : ")
+  	W1 (getint "\nW1 = ")
+        W2 (getint "\nW2 = ")
+        )
+  (setq GOC (angle P1 P2))
+  (setq p11 (polar P1 (- goc (* 0.5 pi)) W1)
+        p22 (polar P2 (- goc (* 0.5 pi)) W2)
+        )
+  (command "osnap" "off")
+  (command "pline" P1 "w" "0" "0"  P2 P22 P11 "c" 
+           )
+  (setvar "OSMODE" OS)
+)

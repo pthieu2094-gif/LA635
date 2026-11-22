@@ -99,7 +99,44 @@ Bản vẽ `LA325.dwg` được tổ chức đồng bộ theo cụm trục dọc
 
 ---
 
-## 5. Hướng dẫn cho thiết bị khác tiếp tục triển khai
+## 5. Hệ thống công cụ AutoLISP kế thừa và tự động hóa (`scripts/lisp/`)
+
+Để đảm bảo dự án có thể tiếp tục triển khai trơn tru trên bất kỳ thiết bị nào mà không bị phụ thuộc vào môi trường máy cũ, toàn bộ công cụ AutoLISP đã được gom về và phân loại thành 3 nhóm chuyên trách trong repository:
+
+### A. Nhóm LISP Chuẩn mực B01 (`scripts/lisp/b01_standards/`)
+Lấy mẫu và kiểm tra đối chiếu trực tiếp từ khối công trình B01:
+- `inspect_b01_standards.lsp` (Lệnh: `INSPECT_B01_STANDARDS`): Trích xuất thông số kỹ thuật mẫu (tên layer, góc xoay hatch mặt cắt tường $45^\circ$, scale $50$, quy cách block cửa).
+- `dumpf.lsp` (Lệnh: `DUMPF`): Quét tọa độ và thuộc tính khung tên của B01 để nhân bản cho B02.
+- `dumpg.lsp` (Lệnh: `DUMPG`): Quét tọa độ hệ trục và dim mẫu của B01.
+
+### B. Nhóm LISP Triển khai B02 (`scripts/lisp/b02_implementation/`)
+Toàn bộ mã nguồn dựng hình và hiệu chỉnh Nhà bảo dưỡng B02 theo hồ sơ Rev01:
+- `b02grid.lsp` (Lệnh: `B02GRID`): Tự động phát sinh hệ lưới trục Trục 1..8 và Trục A, B, C cho B02.
+- `draw_b02_plan.lsp` (Lệnh: `DRAW_PLAN_LINES`): Dựng tim tường và polyline bao che mặt bằng tầng 1.
+- `draw_b02_elevs.lsp` (Lệnh: `DRAW_B02_ELEVS`): Dựng nét bao cho 4 mặt đứng của B02.
+- `draw_b02_roof.lsp` (Lệnh: `DRAW_B02_ROOF`): Dựng mặt bằng mái B02.
+- `anno_b02_plan.lsp` (Lệnh: `ANNO_B02_PLAN`): Ghi chú tên phòng, cao độ hoàn thiện và dim mặt bằng.
+- `anno_b02_elevs.lsp` (Lệnh: `COMPLETE_B02_ELEVS`): Hoàn thiện ghi chú cao độ và trục mặt đứng.
+- `clean_all_exploded_hatch.lsp` (Lệnh: `SCAN_ALL_EXPLODED_HATCH`): Quét và xóa toàn bộ các đoạn line vụn do hatch bị rã trước đó, giải phóng tài nguyên bản vẽ.
+- `do_mirror.lsp` (Lệnh: `DO_MIRROR`): Mirror thiết bị WC trái đối xứng hoàn hảo qua tim $X_c = 28,700.8$.
+- `fix_three_issues.lsp` (Lệnh: `FIX_ALL`): Xử lý dứt điểm 3 lỗi kiến trúc (cột Trục 6-C, khép kín tường Trục C, chia đều bậc thang $250\text{ mm}$).
+
+### C. Nhóm Thư viện Dùng chung (`scripts/lisp/common_tools/`)
+Bộ công cụ CAD chuyên nghiệp kế thừa từ kho dữ liệu chuẩn của kỹ sư (`E:\00. DATA\01. CAD\00. AUTOLISP\`), giúp vẽ và hiệu chỉnh siêu tốc:
+- `TT_STAIRCASE_V1.lsp` (Lệnh: `cc`): Tự động tính toán và chia bậc thang theo kích thước yêu cầu.
+- `TT_DOOR.lsp` (Lệnh: `door`): Tiện ích vẽ và chèn cửa kiến trúc theo kích thước linh hoạt.
+- `TT_DAT_COT_TRUC.lsp` (Lệnh: `SCL1`): Đặt cột hàng loạt tại các giao điểm lưới trục.
+- `TT_TAO_DIM.lsp` (Lệnh: `DS`): Khởi tạo hệ thống DimStyle kiến trúc chuẩn mực.
+- `TT_TDTL_LAYER_DIM.lsp` (Lệnh: `TDTL`): Thay đổi tỉ lệ và chuyển layer cho Dimension.
+- `TT_UPDATE_CAO_DO.lsp` (Lệnh: `CAODO`): Cập nhật ký hiệu và giá trị cao độ trên mặt cắt/mặt đứng.
+- `joinline.lsp` (Lệnh: `nn`): Nối các đoạn Line/Arc rời rạc thành Polyline kín (`Closed`).
+- `tl.lsp` (Lệnh: `TL`): Tính tổng chiều dài danh sách đường nét được chọn.
+- `TONG_HOP_Chinh_Dim_Layer.lsp` (Các lệnh: `DS`, `TOP`, `HI`, `Q1`, `Q2`...): Tinh chỉnh và chuẩn hóa kích thước.
+- `TONG_HOP_Chuyen_Layer.lsp` (Các phím số tắt: `31`, `22`, `21`, `11`, `32`...): Chuyển nhanh layer đối tượng chỉ bằng 1 thao tác bấm phím.
+
+---
+
+## 6. Hướng dẫn cho thiết bị khác tiếp tục triển khai
 
 1. **Clone repository:**
    ```bash
@@ -111,3 +148,7 @@ Bản vẽ `LA325.dwg` được tổ chức đồng bộ theo cụm trục dọc
    - Triển khai Mặt bằng Tầng 2 B02 (nếu có).
    - Triển khai Mặt cắt dọc và Mặt đứng B02 đồng bộ với các mặt đứng của B01.
    - Ghi kích thước (Dimension) chi tiết và tổng thể theo chuẩn layer `21 Dim`.
+4. **Quy trình phối hợp LISP khi vẽ:**
+   - Dùng `scripts/lisp/common_tools/TONG_HOP_Chuyen_Layer.lsp` để gán nhanh layer chuẩn (`31` cho tường, `22` cho hatch, `21` cho dim).
+   - Dùng `joinline.lsp` (`nn`) để đảm bảo toàn bộ nét tường thành Polyline kín trước khi Hatch.
+   - Dùng `TT_TAO_DIM.lsp` và `TT_TDTL_LAYER_DIM.lsp` để đánh kích thước chuẩn tỉ lệ.
