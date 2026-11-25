@@ -1,49 +1,26 @@
-# GEMINI WORKSPACE INSTRUCTIONS: DỰ ÁN LA635 (B01 & B02)
+# GEMINI WORKSPACE INSTRUCTIONS: HỆ THỐNG TRIỂN KHAI KIẾN TRÚC & BU LÔNG NEO TỔNG QUÁT
 
-## 1. Tổng quan & Vai trò
-- **Dự án:** LA635 gồm Nhà giặt ủi (B01) và Nhà bảo dưỡng (B02) chung file `LA325.dwg`.
-- **Hệ tọa độ:**
-  - B01 nằm phía trên: $Y > -42,000$ (Mặt bằng $X \in [0, 36600]$, $Y \in [-6000, 30000]$).
-  - B02 nằm phía dưới: $Y < -42,000$ (Mặt bằng $X \in [0, 36600]$, $Y \in [-59500, -45500]$).
-  - Trục định vị 1..8 dài $36.6\text{ m}$ gióng thẳng hàng từ trên xuống dưới.
-- **Cẩm nang tra cứu AutoLISP cho AI:** Đọc chi tiết tại `docs/AI_AUTOLISP_GUIDE.md`.
+## 1. Quy tắc Master Rule & Khả năng Tái sử dụng cho Mọi Dự Án
+- Thư mục `.agents/` chứa **Bộ Quy Chuẩn Tổng Quát (Universal CAD Deployment Standard)** có thể copy sang bất kỳ dự án AutoCAD mới nào để triển khai **Kiến trúc (Mặt bằng trệt, Mặt bằng mái, Mặt đứng 1–4)** và **Bu lông neo (Mặt bằng định vị & Chi tiết 1/10)**.
+- **Đọc Master Rule bắt buộc tại:** `.agents/rules/cad-deployment-master-rule.md`.
+- **Cẩm nang 91 công cụ AutoLISP thực chiến:** `docs/AI_AUTOLISP_GUIDE.md`.
 
-## 2. Cấu trúc 9 Module AutoLISP (`scripts/lisp/`)
-Toàn bộ 91 file AutoLISP đã được tuyển chọn và tổ chức thành 9 thư mục chuyên biệt:
-1. `architecture/`: Cửa (`door`), cầu thang (`cc`), độ dốc mái (`S1`, `s2`), diện tích phòng (`32`).
-2. `structure/`: Đặt cột (`SCL1`), lưới trục (`VLT`, `DLT`, `R1`..`R4`), dầm cột MC6 (`fc`, `wc`), thép tổ hợp (`VI`), giằng X (`x1`), ti giằng (`TI`), bu lông (`BLN`, `BDT`), bản mã (`BMN`, `BM`, `1E`), Portal frame (`PORTAL`).
-3. `annotation/`: Tạo dim (`DS`), căn chỉnh dim (`TOP`, `HI`), đổi tỉ lệ dim (`TDTL`), dóng đều khoảng cách (`SD`), cắt/bẻ chân dim (`CD`, `BD`), ghi chú chân dim (`TD`), cao độ (`CAODO`), căn lề leader (`all`, `alr`), khoanh mây (`REV`).
-4. `text_tables/`: Copy text (`d1`), sửa text (`TC`), tính toán số trong text (`RT`, `CTT`), số thứ tự tăng dần (`cot`), chuyển field sang text tĩnh (`f2t`), sửa attribute block (`edt`), thống kê bảng (`tkt`), xuất tọa độ ra CAD/Excel (`XTD`, `atx`), xuất danh mục bản vẽ (`eatt`, `EAT1`).
-5. `blocks/`: Đổi base point không xê dịch (`CBP`), nhân bản & đổi tên block (`cb`, `rr`, `DTB`), thay block hàng loạt (`TTB`).
-6. `cad_cleanup/`: Làm phẳng $Z=0$ (`ZZZ`), nối polyline kín (`nn`), đo tổng chiều dài (`TL`), bẻ ngắt đường 1 điểm (`brn`), rải đối tượng (`rdt`), đổi về ByLayer (`lc`), căn điểm đầu (`BLB`..`BLR`), bật Osnap chuẩn (`5`), tra cứu DXF (`show`).
-7. `layers_views_print/`: Phím tắt chuyển layer (`31`, `22`, `21`...), bật lại layer (`T5`), lọc đối tượng (`FF`, `ffd`, `fft`...), ẩn hiện nhanh (`InVis`, `Vis`), khóa viewport (`W`, `Z`), in ấn hàng loạt (`IN`), sửa font (`convertfont`).
-8. `b01_standards/`: Bộ trích xuất chuẩn mực B01 (`inspect_b01_standards.lsp`, `dumpf.lsp`, `dumpg.lsp`).
-9. `b02_implementation/`: Bộ dựng hình & hiệu chỉnh B02 (`b02grid.lsp`, `draw_b02_plan.lsp`, `draw_b02_elevs.lsp`, `draw_b02_roof.lsp`, `anno_b02_plan.lsp`, `anno_b02_elevs.lsp`, `clean_all_exploded_hatch.lsp`, `do_mirror.lsp`, `fix_three_issues.lsp`).
+## 2. Hệ thống 7 Skills Tổng Quát (`.agents/skills/`)
+Khi triển khai bất kỳ hạng mục nào thuộc Kiến trúc hoặc Bu lông neo, AI **BẮT BUỘC** kích hoạt và đọc `SKILL.md` tương ứng:
 
-## 3. Quy tắc bắt buộc khi thao tác AutoCAD & LISP
-- **TUYỆT ĐỐI KHÔNG TỰ Ý LƯU BẢN VẼ khi đang chỉnh sửa dở dang.** Chỉ lưu khi có sự xác nhận của người dùng hoặc sau khi hoàn thiện kiểm tra.
-- **Làm phẳng bản vẽ 2D ($Z=0$):** Luôn dùng `scripts/lisp/cad_cleanup/TT_CHUYEN_Z_VE_0.lsp` (Lệnh: `ZZZ`) trước khi bắt điểm / dựng hình.
-- **Tường & Hatch:**
-  - Nối nét thành Polyline khép kín bằng `joinline.lsp` (Lệnh: `nn`) trước khi hatch.
-  - Tường đặt layer `31 Drawing`, Hatch đặt layer `22 Hatch` (mẫu `LINE`, góc $45^\circ$, scale $50.0$).
-  - Không hatch qua command line raw để tránh kẹt prompt; ưu tiên ActiveX COM `AddHatch` hoặc `_.-HATCH`.
-- **Block:**
-  - Cửa đi, cửa sổ, thiết bị đóng gói thành block chuẩn (`B02_DOOR_*`, `B02_WINDOW_*`).
-  - Đổi base point dùng `LM_ChangeBlockBasePoint.lsp` (Lệnh: `CBP` / `CBC`).
-  - Nhân bản/đổi tên block dùng `LM_CopyRenameBlock.lsp` (Lệnh: `cb`, `rr`).
-  - Thay thế block hàng loạt dùng `TT_THAY_THE_BLOCK.lsp` (Lệnh: `TTB`).
-- **Kích thước & Cao độ:**
-  - Dim đặt trên layer `21 Dim`. Dóng đều dim bằng `TT_SPACE_DIM.lsp` (Lệnh: `SD`).
-  - Cắt ngắn chân dim thừa bằng `Auto_Cut_Dimension_CD_BD.lsp` (Lệnh: `CD`).
-  - Ghi chú chân dim dùng `TT_TEXT_DIM_BELOW.lsp` (Lệnh: `TD`).
-  - Cập nhật cao độ dùng `TT_UPDATE_CAO_DO.lsp` (Lệnh: `CAODO`).
-- **Thang & Mái:**
-  - Bậc thang rộng chuẩn $250\text{ mm}$ chia tự động bằng `TT_STAIRCASE_V1.lsp` (Lệnh: `cc`).
-  - Dốc mái dùng `TT_VE_DO_DOC_SLOPE.lsp` (Lệnh: `S1`) và `TT_DRAW_SLOPE_XLINE.lsp` (Lệnh: `s2`).
-- **Ghi chú & Revision:**
-  - Căn lề leader & text bằng `TT_CANH_LEADER_TEXT.lsp` (Lệnh: `all`, `alr`).
-  - Sao chép nội dung text bằng `TT_COPY_TEXT.lsp` (Lệnh: `d1`).
-  - Chuyển field sang text tĩnh bằng `TT_CONVERT_FIELD_TO_TEXT.lsp` (Lệnh: `f2t`).
-  - Khoanh mây revision sửa đổi bằng `TT_KHOANH_MAY_REV.lsp` (Lệnh: `REV`).
-- **Layout & Viewport:**
-  - Khóa khung nhìn Viewport trong layout bằng `TT_KHOA_VIEWPORT.lsp` (Lệnh: `W`).
+### A. Nhóm 4 Skills Triển khai Kiến trúc Tổng quát
+1. **`cad-arch-grid-frame`** (`.agents/skills/cad-arch-grid-frame/SKILL.md`): Tự động khảo sát thông số bản vẽ mẫu (`Auto-Discovery`), làm phẳng $Z=0$ (`ZZZ`), dọn hatch vỡ, dựng hệ lưới trục theo mảng `$X_GRIDS`, `$Y_GRIDS` bất kỳ và chèn khung bản vẽ căn thẳng hàng theo `$Y_BASELINE`.
+2. **`cad-arch-ground-plan`** (`.agents/skills/cad-arch-ground-plan/SKILL.md`): Vẽ Mặt bằng tầng (Cột kết cấu, tường Closed Polyline + Hatch `LINE` $45^\circ$ theo `$SCALE`, đóng gói Block cửa đi/cửa sổ/cửa cuốn, thuật toán chia bậc cầu thang chuẩn $250\text{ mm}$, mirror các khu chức năng đối xứng như WC và đánh Dim 2 lớp).
+3. **`cad-arch-roof-plan`** (`.agents/skills/cad-arch-roof-plan/SKILL.md`): Vẽ Mặt bằng mái (Đường bao mái chính/mái phụ/canopy theo độ đua `$OVERHANG`, diềm mái fascia $150\text{ mm}$, máng xối `WIPEOUT`, phễu thu nước $\varnothing 100$ tại giao điểm trục, tag độ dốc xoay theo vector thoát nước và Hatch tôn `STEEL`).
+4. **`cad-arch-elevations`** (`.agents/skills/cad-arch-elevations/SKILL.md`): Vẽ Mặt đứng 1–4 (Ánh xạ thứ tự trục theo 4 hướng nhìn, đường gióng cao độ `DRAWORDER _B`, mốc cao độ tự động flip âm ở cốt $\pm 0.000$ chống đè chữ, sóng tôn/mái dốc/cửa và Dynamic Block ống thoát nước đứng `DRAWORDER _F`).
+
+### B. Nhóm 3 Skills Triển khai Bu lông neo Tổng quát
+5. **`cad-anchor-bolt-plan`** (`.agents/skills/cad-anchor-bolt-plan/SKILL.md`): Vẽ Mặt bằng định vị Bu lông neo (Khung view căn theo `$Y_BASELINE`, lưới trục & Dim ở Trên & Trái không text below dim, đặt Block chân cột đúng góc xoay $\theta$, thuật toán phân nhóm mã chi tiết `A1..An` theo bộ 3 khóa `(BlockType, Rotation, ElevationFFL)`, khoanh vùng nét đứt bo góc đa màu ACI, gắn tag lục giác `Scale = $SCALE` và mốc cao độ).
+6. **`cad-anchor-detail-plan`** (`.agents/skills/cad-anchor-detail-plan/SKILL.md`): Vẽ Hình chiếu bằng Chi tiết Bản mã & Bu lông tỉ lệ 1/10 (Tự động dàn $N$ chi tiết vào các khung View 1/10 lưới 2x2 nét đứt `HIDDEN`, chèn trực tiếp Block chân cột đúng góc xoay trên mặt bằng, bong bóng trục ghép `"&"`, `"TO"`, Dim 2 lớp `"GB 1-10"` đối xứng `"="`, Leader mũi tên `_Open30` và tự động đặt ký hiệu vết mặt cắt song song bụng cột).
+7. **`cad-anchor-detail-section`** (`.agents/skills/cad-anchor-detail-section/SKILL.md`): Vẽ Mặt cắt đứng Chân cột & Ghi chú Leader tỉ lệ 1/10 (Móng bê tông `23_Rc_GB` hatch `AR-CONC`, lớp vữa SikaGrout hatch `NET` $45^\circ$, bản mã thép, thân cột thép thẳng hoặc vát thu đáy + `Break line`, block bu lông mặt đứng, và 4 cụm ghi chú Leader + cao độ `FFL` căn thẳng hàng bên trái tại $X = sx - 620.0$ có nội suy tọa độ theo góc vát cánh cột).
+
+## 3. Thông tin Riêng của Workspace Dự án Hiện tại (`LA635`)
+- **File bản vẽ chính:** `LA325.dwg`
+  - **Hàng trên ($Y > -42,000$):** Nhà giặt ủi **B01** (Tỉ lệ mặt bằng `1/150`, Chi tiết bu lông neo `1/10`, căn bằng đáy tại `$Y_BASELINE = -12,607.6 mm`).
+  - **Hàng dưới ($Y < -42,000$):** Nhà bảo dưỡng **B02** (Tỉ lệ mặt bằng/mái `1/100`, Mặt đứng `1/120` & `1/60`, căn đỉnh khung tại `$Y_BASELINE = -32,608.0 mm`).
+- **Thư viện 91 công cụ AutoLISP:** Đặt tại `scripts/lisp/` (gồm 9 module: `architecture/`, `structure/`, `annotation/`, `text_tables/`, `blocks/`, `cad_cleanup/`, `layers_views_print/`, `b01_standards/`, `b02_implementation/`).
